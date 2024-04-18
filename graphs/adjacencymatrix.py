@@ -23,12 +23,37 @@ class Graph:
         if not self.directed:
             self.graph[v][u] = 0
 
-    def get_adjacent_vertices(v):
-        
+    def get_adjacent_vertices(self, v):
+        #debated iterating vertically and then adding vertex based on row number, but remeber something about indexing vertically
+        #takes longer than indexing horizontally related to the way stored in memory
+        ret = []
+        counter = 0
+        if not self.directed:
+            for i in self.graph[v]:
+                if i != 0:
+                    ret.append(counter)
+                
+                counter += 1
+            return ret
+        else:
+            for i in self.graph:
+                if i[v] != 0:
+                    ret.append(counter)
+                counter += 1
+
+
         
     def degree(self, v):
-        return len(self.graph[v]) - self.graph[v].count(0)
-        
+        if not self.directed:
+            return len(self.graph[v]) - self.graph[v].count(0)
+        else:
+            in_degree = len(self.graph[v]) - self.graph[v].count(0)
+            out_degree = 0
+            for i in self.graph:
+                if i[v] != 0:
+                    out_degree += 1
+            
+            return in_degree, out_degree
     def is_connected(self, u, v):
         return self.graph[u][v] != 0
 
@@ -43,10 +68,20 @@ class Graph:
             for j in i:
                 print(str(j), end = " ")
             print()
+        print()
 
-test_graph = Graph(5)
+test_graph = Graph(5, False)
 test_graph.add_edge(1,2)
 test_graph.add_edge(3,4)
+test_graph.add_edge(3,2)
+test_graph.add_edge(2,3)
+test_graph.add_edge(0,3)
 test_graph.print_graph()
+test_graph.remove_edge(0,3)
+test_graph.print_graph()
+print(test_graph.get_adjacent_vertices(3))
+print(test_graph.degree(3))
+print(test_graph.degree(1))
+print()
 
-
+#shouldn't write like this, go more toward test based
