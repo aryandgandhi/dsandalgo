@@ -1,4 +1,5 @@
 from collections import deque
+from typing import List, Tuple, Optional
 #this would be for undirected, for directed would just edit the add_edge method to create an edge one way
 class Graph:
     def __init__(self, vertices: int, directed: bool) -> None:
@@ -9,7 +10,7 @@ class Graph:
     def add_edge(self, u: int, v: int, weight: int=1) -> None:
         
         if u >= len(self.graph) or v >= len(self.graph) or u < 0 or v < 0:
-            return "can't call that" 
+            raise ValueError("Invalid vertex")
         self.graph[u][v] = weight
         
         if not self.directed: 
@@ -17,13 +18,13 @@ class Graph:
 
     def remove_edge(self, u: int, v:int) -> None:
         if u >= len(self.graph) or v >= len(self.graph) or u < 0 or v < 0:
-            return "can't call that" 
+            raise ValueError("Invalid vertex") 
         self.graph[u][v] = 0
         
         if not self.directed:
             self.graph[v][u] = 0
 
-    def get_adjacent_vertices(self, v:int) -> None:
+    def get_adjacent_vertices(self, v:int) -> List[int]:
         #debated iterating vertically and then adding vertex based on row number, but remember something about indexing vertically
         #takes longer than indexing horizontally related to the way stored in memory
         ret = []
@@ -38,7 +39,7 @@ class Graph:
 
 
         
-    def degree(self, v:int) -> None:
+    def degree(self, v:int) -> Tuple[int, int]:
         '''can increase the time complexity from O(N) to O(1) by keeping two lists with len(graph) vertices and adding/subtracting when the
         add and remove methods are called'''
         if not self.directed:
@@ -52,7 +53,7 @@ class Graph:
             
             return in_degree, out_degree
         
-    def is_directly_connected(self, u:int, v:int) -> None:
+    def is_directly_connected(self, u:int, v:int) -> bool:
         return self.graph[u][v] != 0
 
     #level order traversal, assume there are cycles
@@ -80,7 +81,7 @@ class Graph:
     def dfs(self, u, v, visited=None):
         if visited == None:
         
-            visited = [False] * len(self.graph[v])
+            visited = [False] * self.vertices
         visited[u] = True
         if u == v:
             return True
