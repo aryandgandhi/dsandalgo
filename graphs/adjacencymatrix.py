@@ -1,12 +1,12 @@
 from collections import deque
 #this would be for undirected, for directed would just edit the add_edge method to create an edge one way
 class Graph:
-    def __init__(self, vertices, directed):
+    def __init__(self, vertices: int, directed: bool) -> None:
         self.vertices = vertices
         self.graph = [[0 for _ in range(vertices)] for i in range(vertices)]
         self.directed = directed
 
-    def add_edge(self, u, v, weight=1):
+    def add_edge(self, u: int, v: int, weight: int=1) -> None:
         
         if u >= len(self.graph) or v >= len(self.graph) or u < 0 or v < 0:
             return "can't call that" 
@@ -15,7 +15,7 @@ class Graph:
         if not self.directed: 
             self.graph[v][u] = weight
 
-    def remove_edge(self, u, v):
+    def remove_edge(self, u: int, v:int) -> None:
         if u >= len(self.graph) or v >= len(self.graph) or u < 0 or v < 0:
             return "can't call that" 
         self.graph[u][v] = 0
@@ -23,7 +23,7 @@ class Graph:
         if not self.directed:
             self.graph[v][u] = 0
 
-    def get_adjacent_vertices(self, v):
+    def get_adjacent_vertices(self, v:int) -> None:
         #debated iterating vertically and then adding vertex based on row number, but remember something about indexing vertically
         #takes longer than indexing horizontally related to the way stored in memory
         ret = []
@@ -38,7 +38,9 @@ class Graph:
 
 
         
-    def degree(self, v):
+    def degree(self, v:int) -> None:
+        '''can increase the time complexity from O(N) to O(1) by keeping two lists with len(graph) vertices and adding/subtracting when the
+        add and remove methods are called'''
         if not self.directed:
             return len(self.graph[v]) - self.graph[v].count(0)
         else:
@@ -50,12 +52,12 @@ class Graph:
             
             return in_degree, out_degree
         
-    def is_directly_connected(self, u, v):
+    def is_directly_connected(self, u:int, v:int) -> None:
         return self.graph[u][v] != 0
 
     #level order traversal, assume there are cycles
-    def bfs(self, v):
-        visited = [False] * len(self.graph[v])
+    def bfs(self, v:int) -> None:
+        visited = [False] * self.vertices
         def helper(v):
             queue = deque([v])
             
@@ -75,9 +77,21 @@ class Graph:
         helper(v)
 
 
-    def dfs(self, u, v):
-
+    def dfs(self, u, v, visited=None):
+        if visited == None:
         
+            visited = [False] * len(self.graph[v])
+        visited[u] = True
+        if u == v:
+            return True
+        for i in self.get_adjacent_vertices(u):
+            if visited[i] != True:
+               
+                if self.dfs(i, v, visited): #if we've found the path, return True everywhere
+                    return True
+                
+        return False
+
         
     def print_graph(self):
         for i in self.graph:
@@ -101,6 +115,7 @@ print(test_graph.get_adjacent_vertices(3))
 print(test_graph.degree(3))
 print(test_graph.degree(1))
 test_graph.bfs(3)
+print(test_graph.dfs(3, 0))
 print()
 
 #shouldn't write like this, go more toward test based
