@@ -35,10 +35,7 @@ class Graph:
             
             counter += 1
         return ret
-        
-
-
-        
+   
     def degree(self, v:int) -> Tuple[int, int]:
         '''can increase the time complexity from O(N) to O(1) by keeping two lists with len(graph) vertices and adding/subtracting when the
         add and remove methods are called'''
@@ -56,28 +53,37 @@ class Graph:
     def is_directly_connected(self, u:int, v:int) -> bool:
         return self.graph[u][v] != 0
 
+        
+    def print_graph(self):
+        for i in self.graph:
+            for j in i:
+                print(str(j), end = " ")
+            print()
+        print()
+
+
+    #above is base class, below is traveral algs
+    
     #level order traversal, assume there are cycles
-    def bfs(self, v:int) -> None:
+    def bfs(self, u: int, v:int) -> str:
         visited = [False] * self.vertices
-        def helper(v):
-            queue = deque([v])
-            
-            counter = 0
-            while queue:
-                for j in range(len(queue)):
-                    cur = queue.popleft()
-                    visited[cur] = True
-                    ret = []
-                    for i in self.get_adjacent_vertices(cur):
-                        if visited[i] == False:
-                            queue.append(i)
-                            ret.append(i)
-                counter += 1
-                print(v, str(counter), ret)
-
-        helper(v)
-
-
+        
+        queue = deque([u])
+        
+        counter = 0
+        while queue:
+            for j in range(len(queue)):
+                cur = queue.popleft()
+                visited[cur] = True
+                for i in self.get_adjacent_vertices(cur):
+                    if i == v:
+                        return f"The distance from {u} to {v} is {counter + 1}"
+                    if visited[i] == False:
+                        queue.append(i)
+                
+            counter += 1
+        return f"{v} is unreachable from {u}"
+    
     def dfs(self, u, v, visited=None):
         if visited == None:
         
@@ -87,37 +93,31 @@ class Graph:
             return True
         for i in self.get_adjacent_vertices(u):
             if visited[i] != True:
-               
+                
                 if self.dfs(i, v, visited): #if we've found the path, return True everywhere
                     return True
                 
         return False
 
-        
-    def print_graph(self):
-        for i in self.graph:
-            for j in i:
-                print(str(j), end = " ")
-            print()
-        print()
 
-test_graph = Graph(5, True)
-test_graph.add_edge(1,2)
-test_graph.add_edge(3,4)
-test_graph.add_edge(4,1)
-test_graph.add_edge(4,0)
-test_graph.add_edge(3,2)
-test_graph.add_edge(2,3)
-test_graph.add_edge(0,3)
-test_graph.print_graph()
-test_graph.remove_edge(0,3)
-test_graph.print_graph()
-print(test_graph.get_adjacent_vertices(3))
-print(test_graph.degree(3))
-print(test_graph.degree(1))
-test_graph.bfs(3)
-print(test_graph.dfs(3, 0))
-print()
+
+
+
+# test_graph = Graph(5, True)
+# test_graph.add_edge(1,2)
+# test_graph.add_edge(3,4)
+# test_graph.add_edge(4,1)
+# test_graph.add_edge(4,0)
+# test_graph.add_edge(3,2)
+# test_graph.add_edge(2,3)
+# test_graph.add_edge(0,3)
+# test_graph.print_graph()
+# test_graph.remove_edge(0,3)
+# test_graph.print_graph()
+# print(test_graph.get_adjacent_vertices(3))
+# print(test_graph.degree(3))
+# print(test_graph.degree(1))
+# print()
 
 #shouldn't write like this, go more toward test based
 

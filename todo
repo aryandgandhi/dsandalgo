@@ -1,6 +1,1 @@
-4/17
-graphs: add support for weighted graphs, directed graphd, error handling; methods for remove_Edge, get_adjacent, degree, is_connected, bfs and dfs
-Do the same above for adjacency list
-**utility methods like is_cyclic, path_exists and shortest_path to come later.
 
-4/18
