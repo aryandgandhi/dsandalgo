@@ -49,7 +49,7 @@ class Graph:
             #come back to this
             out = len(self.get_adjacent_vertices(u))
             #in = 
-    #account for cycles and 
+    #account for cycles and IGNORE weights
     def bfs(self, u: int, v: int) -> str:
         """"""
         if u not in self.adj_list:
@@ -60,7 +60,7 @@ class Graph:
         while queue:
             for j in range(len(queue)):
                 counter += 1
-                cur = queue.pop()
+                cur = queue.popleft()
                 visited.add(cur)
                 for i in self.adj_list[cur[0]]:
                     if i[0] == v:

@@ -64,7 +64,7 @@ class Graph:
 
     #above is base class, below is traveral algs
     
-    #level order traversal, assume there are cycles
+    #level order traversal, assume there are cycles and IGNORE weights
     def bfs(self, u: int, v:int) -> str:
         visited = [False] * self.vertices
         
